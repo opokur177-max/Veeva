@@ -1,39 +1,196 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VIIVA - Real Try-On</title>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>VIIVA - Full Screen Real Try-On</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
-body{background:#000;color:#fff}
-.top{position:sticky;top:0;z-index:99;background:#fff;color:#000;display:flex;justify-content:space-between;padding:8px 12px;align-items:center}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:#000;color:#fff;overflow-x:hidden}
+.top{position:sticky;top:0;z-index:50;background:#fff;color:#000;display:flex;justify-content:space-between;align-items:center;padding:10px 12px}
 .logo{font-weight:900;color:#ff007f;font-size:22px}
-.earn{background:#000;color:#0f0;padding:4px 8px;border-radius:12px;font-size:11px;font-weight:700}
-.detect{font-size:10px;background:#222;color:#fff;padding:5px 10px;border-radius:15px}
-.cat-bar{background:#111;padding:8px;display:flex;gap:8px;overflow-x:auto}
-#dropdownBtn{background:#ff007f;color:#fff;border:none;padding:8px 16px;border-radius:20px;font-weight:800}
-#dropdownMenu{display:none;position:absolute;top:85px;left:8px;background:#fff;color:#000;border-radius:12px;width:200px;z-index:100}
-#dropdownMenu div{padding:12px 15px;border-bottom:1px solid #eee;font-weight:600;cursor:pointer}
+.earn{background:#000;color:#0f0;padding:6px 10px;border-radius:20px;font-size:12px;font-weight:800}
+.detect{background:#222;color:#fff;padding:6px 12px;border-radius:20px;font-size:11px}
+.cat-bar{background:#111;padding:10px;display:flex;gap:8px;overflow-x:auto;position:sticky;top:48px;z-index:40}
+.cat-bar button{white-space:nowrap;border:1px solid #ff007f;background:#000;color:#fff;padding:8px 16px;border-radius:20px;font-weight:700;cursor:pointer}
+#dropdownBtn{background:#ff007f!important}
+#dropdownMenu{display:none;position:fixed;top:95px;left:10px;background:#fff;color:#000;border-radius:14px;width:220px;z-index:100;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+#dropdownMenu div{padding:14px 16px;border-bottom:1px solid #eee;font-weight:700;cursor:pointer}
+#dropdownMenu div:active{background:#ff007f;color:#fff}
+
+/* MIRROR - SMALL */
 .mirror-wrap{display:flex;flex-direction:column;align-items:center;padding:20px 10px}
-.mirror{width:210px;height:210px;border-radius:50%;border:6px solid #ff007f;overflow:hidden;background:#111;position:relative;box-shadow:0 0 30px #ff007f}
+.mirror{width:200px;height:200px;border-radius:50%;border:5px solid #ff007f;overflow:hidden;background:#111;position:relative;box-shadow:0 0 25px #ff007f88;cursor:pointer}
 .mirror video{width:100%;height:100%;object-fit:cover;display:none}
-.btn-pink{background:#ff007f;color:#fff;border:none;padding:12px;border-radius:25px;font-weight:800;width:90%;margin:10px}
-.dress-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
-.dress-card{background:#222;border-radius:12px;overflow:hidden}
-.dress-card img{width:100%;height:170px;object-fit:cover}
-</style></head><body>
-<div class="top"><div style="display:flex;gap:8px;align-items:center"><span class="logo">VIIVA</span><span class="earn" id="earnText">💰 0 GHC YOU EARN</span></div><span class="detect" id="detectText">Detecting...</span></div>
-<div class="cat-bar"><button id="dropdownBtn" onclick="toggleDropdown()">☰ Occasions ▼</button>
-<div id="dropdownMenu"><div onclick="loadOccasion('Wedding')">💒 Wedding (70+)</div><div onclick="loadOccasion('Funeral')">⚫ Funeral (70+)</div><div onclick="loadOccasion('Church')">⛪ Church</div><div onclick="loadOccasion('Office')">🏢 Office</div><div onclick="loadOccasion('Beach')">🏖️ Beach</div><div onclick="loadOccasion('Makeup')">💄 Makeup</div></div>
-<button style="border:1px solid #ff007f;background:#000;color:#fff;padding:6px 14px;border-radius:20px" onclick="loadOccasion('Funeral')">Funeral</button>
-<button style="border:1px solid #ff007f;background:#000;color:#fff;padding:6px 14px;border-radius:20px" onclick="loadOccasion('Church')">Church</button>
-<button style="border:1px solid #ff007f;background:#000;color:#fff;padding:6px 14px;border-radius:20px" onclick="loadOccasion('Office')">Office</button></div>
-<div class="mirror-wrap"><div class="mirror" id="mirrorCircle" onclick="startMirror()"><video id="video" autoplay playsinline muted></video><div id="tap" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.4);font-weight:800">TAP MIRROR</div></div><div style="margin-top:10px;font-weight:800">Tap Mirror - 100% Real Try-On</div></div>
-<button class="btn-pink" onclick="loadOccasion(currentOccasion)">👗 70+ Online Dresses - Tap occasion to load</button>
+
+/* FULLSCREEN MODE */
+#fullScreenMirror{display:none;position:fixed;inset:0;z-index:9999;background:#000}
+#fullScreenMirror.active{display:block}
+#fullVideo{width:100%;height:100%;object-fit:cover}
+#dressOverlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:70%;max-width:380px;pointer-events:none;filter:drop-shadow(0 10px 20px rgba(0,0,0,.5))}
+#closeFull{position:absolute;top:15px;right:15px;background:rgba(0,0,0,.7);color:#fff;border:2px solid #fff;width:45px;height:45px;border-radius:50%;font-size:20px;z-index:10000}
+#fullTopInfo{position:absolute;top:15px;left:15px;background:rgba(0,0,0,.7);color:#fff;padding:8px 14px;border-radius:20px;font-size:12px;z-index:10000}
+
+.dress-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px}
+.dress-card{background:#1a1a1a;border-radius:14px;overflow:hidden;border:1px solid #333}
+.dress-card img{width:100%;height:220px;object-fit:cover}
+.dress-info{padding:8px}
+.dress-name{font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dress-price{color:#ff007f;font-weight:900;font-size:13px;margin:3px 0}
+.try-btn{background:#ff007f;color:#fff;border:none;width:100%;padding:9px;border-radius:20px;font-weight:800;cursor:pointer;margin-top:4px}
+.try-btn:active{transform:scale(.95)}
+</style>
+</head>
+<body>
+
+<div class="top">
+<div style="display:flex;gap:8px;align-items:center"><span class="logo">VIIVA</span><span class="earn" id="earnText">💰 0 GHC EARNED</span></div>
+<span class="detect" id="detectText">Tap Mirror to Start</span>
+</div>
+
+<div class="cat-bar">
+<button id="dropdownBtn" onclick="toggleDropdown()">☰ Occasions ▼</button>
+<div id="dropdownMenu">
+<div onclick="loadOccasion('Wedding')">💒 Wedding Gowns</div>
+<div onclick="loadOccasion('Funeral')">⚫ Funeral - Black</div>
+<div onclick="loadOccasion('Church')">⛪ Church - Modest</div>
+<div onclick="loadOccasion('Office')">🏢 Office - Corporate</div>
+<div onclick="loadOccasion('Beach')">🏖️ Beach - Light</div>
+<div onclick="loadOccasion('Engagement')">💍 Engagement</div>
+</div>
+<button onclick="loadOccasion('Funeral')">Funeral</button>
+<button onclick="loadOccasion('Church')">Church</button>
+<button onclick="loadOccasion('Office')">Office</button>
+<button onclick="loadOccasion('Wedding')">Wedding</button>
+</div>
+
+<div class="mirror-wrap">
+<div class="mirror" id="mirrorCircle" onclick="startMirror()">
+<video id="smallVideo" autoplay playsinline muted></video>
+<div id="tap" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,.45);font-weight:900;text-align:center">TAP FOR<br>FULLSCREEN<br>MIRROR<br>👗</div>
+</div>
+<div style="margin-top:12px;font-weight:800;color:#ff007f">Real Full-Screen Try-On</div>
+<div style="font-size:12px;opacity:.7;margin-top:4px">Tap mirror, then tap dress below</div>
+</div>
+
 <div id="dressGrid" class="dress-grid"></div>
+
+<!-- FULLSCREEN MIRROR -->
+<div id="fullScreenMirror">
+<button id="closeFull" onclick="closeFull()">✕</button>
+<div id="fullTopInfo">👗 <span id="currentDressName">Select Dress Below</span></div>
+<video id="fullVideo" autoplay playsinline muted></video>
+<img id="dressOverlay" src="">
+<div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.9));padding:15px;display:flex;gap:8px;overflow-x:auto" id="fullDressStrip"></div>
+</div>
+
 <script>
 let currentOccasion='Wedding';
+let dresses={
+'Wedding':[
+{name:'Aso Ebi Lace Wedding Gown',price:'450 GHC',img:'https://images.unsplash.com/photo-1594552072238-b8a33785b261?w=500'},
+{name:'White Mermaid Wedding Dress',price:'620 GHC',img:'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500'},
+{name:'Kente Bridal Gown',price:'580 GHC',img:'https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=500'},
+{name:'Off-Shoulder Wedding Dress',price:'490 GHC',img:'https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=500'},
+{name:'Princess Wedding Ball Gown',price:'750 GHC',img:'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=500'},
+{name:'Simple White Wedding Dress',price:'380 GHC',img:'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500'}
+],
+'Funeral':[
+{name:'Black Funeral Lace Dress',price:'180 GHC',img:'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=500'},
+{name:'Black & White Funeral Dress',price:'150 GHC',img:'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=500'},
+{name:'All Black Modest Funeral',price:'120 GHC',img:'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=500'},
+{name:'Black Kaba Funeral Attire',price:'200 GHC',img:'https://images.unsplash.com/photo-1612336307429-8a898d10e223?w=500'},
+{name:'Black Slit Funeral Dress',price:'165 GHC',img:'https://images.unsplash.com/photo-1596783046904-40048f82c65a?w=500'},
+{name:'Elegant Black Funeral Gown',price:'195 GHC',img:'https://images.unsplash.com/photo-1554412933-514a83d2f3c0?w=500'}
+],
+'Church':[
+{name:'Pink Church Modest Dress',price:'130 GHC',img:'https://images.unsplash.com/photo-1495385794356-15371f348c31?w=500'},
+{name:'Blue Kaba Church Wear',price:'110 GHC',img:'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?w=500'},
+{name:'White Lace Church Dress',price:'140 GHC',img:'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?w=500'},
+{name:'Floral Church Dress',price:'95 GHC',img:'https://images.unsplash.com/photo-1571513800374-df1bbe650e56?w=500'},
+{name:'Long Sleeve Church Gown',price:'125 GHC',img:'https://images.unsplash.com/photo-1550928431-ee0ec6db30d3?w=500'},
+{name:'Kente Church Dress',price:'160 GHC',img:'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=500'}
+],
+'Office':[
+{name:'Corporate Office Suit Dress',price:'180 GHC',img:'https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?w=500'},
+{name:'Office Pencil Dress Black',price:'145 GHC',img:'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500'},
+{name:'Blue Office Formal Dress',price:'155 GHC',img:'https://images.unsplash.com/photo-1554412933-514a83d2f3c0?w=500'},
+{name:'Executive Office Gown',price:'195 GHC',img:'https://images.unsplash.com/photo-1591369822096-ffd140ec948f?w=500'},
+{name:'Office Kaba & Slit',price:'135 GHC',img:'https://images.unsplash.com/photo-1554412933-514a83d2f3c0?w=500'},
+{name:'Corporate White Shirt Dress',price:'125 GHC',img:'https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=500'}
+],
+'Beach':[
+{name:'Beach Flow Yellow Dress',price:'90 GHC',img:'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=500'},
+{name:'Beach Ankara Short Dress',price:'85 GHC',img:'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=500'},
+{name:'White Beach Maxi Dress',price:'110 GHC',img:'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=500'},
+{name:'Beach Party Mini Dress',price:'75 GHC',img:'https://images.unsplash.com/photo-1501466044931-62695aada8e9?w=500'},
+{name:'Beach Sarong Dress',price:'95 GHC',img:'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?w=500'},
+{name:'Beach Sunset Dress',price:'105 GHC',img:'https://images.unsplash.com/photo-1495385794356-15371f348c31?w=500'}
+],
+'Engagement':[
+{name:'Engagement Red Slit Gown',price:'320 GHC',img:'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500'},
+{name:'Gold Engagement Dress',price:'350 GHC',img:'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=500'},
+{name:'Kente Engagement Wear',price:'400 GHC',img:'https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=500'},
+{name:'Lace Engagement Dress',price:'280 GHC',img:'https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=500'},
+{name:'Green Engagement Gown',price:'300 GHC',img:'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?w=500'},
+{name:'Pink Engagement Ball Dress',price:'310 GHC',img:'https://images.unsplash.com/photo-1594552072238-b8a33785b261?w=500'}
+]
+};
+
 function toggleDropdown(){let m=document.getElementById('dropdownMenu');m.style.display=m.style.display==='block'?'none':'block';}
-function loadOccasion(o){currentOccasion=o;document.getElementById('dropdownMenu').style.display='none';document.getElementById('dropdownBtn').textContent='☰ '+o+' ▼';let g=document.getElementById('dressGrid');g.innerHTML='';for(let i=0;i<6;i++){let d=document.createElement('div');d.className='dress-card';d.innerHTML=`<img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400"><div style="padding:6px;font-size:11px"><b>${o} Dress ${i+1}</b><br>45 GHC<br><button onclick="tryOn()" style="background:#ff007f;color:#fff;border:none;padding:4px 10px;border-radius:12px;width:100%;margin-top:4px">TRY ON</button></div>`;g.appendChild(d);}}
-async function startMirror(){let v=document.getElementById('video');try{let s=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}});v.srcObject=s;v.style.display='block';document.getElementById('tap').style.display='none';await v.play();document.getElementById('detectText').textContent='Woman Detected ✓';}catch(e){alert('Allow camera: open in Chrome, error:'+e.message);}}
-function tryOn(){let e=document.getElementById('earnText');let c=parseInt(e.textContent)||0;e.textContent='💰 '+(c+2)+' GHC YOU EARN';startMirror();window.scrollTo({top:0,behavior:'smooth'});}
+document.addEventListener('click',e=>{if(!e.target.closest('#dropdownBtn')&&!e.target.closest('#dropdownMenu'))document.getElementById('dropdownMenu').style.display='none';});
+
+function loadOccasion(o){
+currentOccasion=o;
+document.getElementById('dropdownMenu').style.display='none';
+document.getElementById('dropdownBtn').textContent='☰ '+o+' ▼';
+let grid=document.getElementById('dressGrid');
+let strip=document.getElementById('fullDressStrip');
+grid.innerHTML=''; strip.innerHTML='';
+let list=dresses[o]||dresses['Wedding'];
+list.forEach((d,i)=>{
+let card=document.createElement('div');
+card.className='dress-card';
+card.innerHTML=`<img src="${d.img}" loading="lazy"><div class="dress-info"><div class="dress-name">${d.name}</div><div class="dress-price">${d.price}</div><button class="try-btn" onclick="tryOn('${o}',${i})">TRY ON FULL</button></div>`;
+grid.appendChild(card);
+let mini=document.createElement('div');
+mini.style.cssText='min-width:70px;cursor:pointer;text-align:center';
+mini.innerHTML=`<img src="${d.img}" style="width:60px;height:60px;border-radius:10px;object-fit:cover;border:2px solid #ff007f"><div style="font-size:9px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:60px">${d.name.split(' ')[0]}</div>`;
+mini.onclick=()=>tryOn(o,i);
+strip.appendChild(mini);
+});
+}
+
+async function startMirror(){
+let smallV=document.getElementById('smallVideo');
+let fullV=document.getElementById('fullVideo');
+try{
+let stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}});
+smallV.srcObject=stream; smallV.style.display='block';
+fullV.srcObject=stream;
+document.getElementById('tap').style.display='none';
+document.getElementById('detectText').textContent='✓ Camera Ready - Full Screen Open';
+await fullV.play(); await smallV.play();
+openFull();
+}catch(e){alert('Allow camera! Use Chrome and allow permission. Error:'+e.message);}
+}
+
+function openFull(){document.getElementById('fullScreenMirror').classList.add('active');}
+function closeFull(){document.getElementById('fullScreenMirror').classList.remove('active');}
+
+function tryOn(occ,index){
+let d=dresses[occ][index];
+document.getElementById('dressOverlay').src=d.img;
+document.getElementById('dressOverlay').style.display='block';
+document.getElementById('currentDressName').textContent=d.name+' - '+d.price;
+openFull();
+startMirror();
+let earnEl=document.getElementById('earnText');
+let curr=parseInt(earnEl.textContent.replace(/\D/g,''))||0;
+earnEl.textContent='💰 '+(curr+2)+' GHC EARNED';
+}
+
 loadOccasion('Wedding');
-</script></body></html>
+</script>
+</body>
+</html>
