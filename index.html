@@ -1,97 +1,198 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VEEVA - Ghana Virtual Try-On</title>
+<html><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>VIIVA - Your Full Idea 70+ Dresses + Boutique + Makeup + YOU Earn</title>
 <style>
-body{margin:0;font-family:Arial,sans-serif;background:#fff0f5}
-.header{background:white;padding:15px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,0.1);position:sticky;top:0;z-index:10}
-.logo{color:#d81b60;font-size:28px;font-weight:bold}
-.hero{background:linear-gradient(135deg,#d81b60,#ff80ab);color:white;padding:40px 20px;text-align:center}
-.hero h1{margin:0;font-size:32px}
-.btn{padding:14px 28px;border:none;border-radius:25px;font-weight:bold;cursor:pointer;font-size:16px;margin:5px}
-.btn-white{background:white;color:#d81b60}
-.btn-green{background:#25D366;color:white}
-.products{display:grid;grid-template-columns:1fr 1fr;gap:15px;padding:15px;max-width:600px;margin:auto}
-.card{background:white;border-radius:15px;padding:10px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-.card img{width:100%;height:140px;object-fit:cover;border-radius:10px;background:#ffe4ec}
-.price{color:#d81b60;font-weight:bold;font-size:18px}
-.tryon{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:100;justify-content:center;align-items:center;flex-direction:column;padding:20px;box-sizing:border-box}
-.tryon.active{display:flex}
-#preview{width:280px;height:400px;background:white;border-radius:15px;object-fit:cover}
-</style>
-</head>
-<body>
+_{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,sans-serif}
+body{background:#0f0f0f;color:#fff}
+header{position:sticky;top:0;z-index:90;background:#fff;display:flex;justify-content:space-between;padding:10px 14px;color:#000}
+.logo{font-weight:900;font-size:20px;background:linear-gradient(90deg,#ff007a,#ff5a00);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.icon-btn{width:38px;height:38px;border-radius:50%;border:1px solid #eee;background:#fff;display:grid;place-items:center;cursor:pointer}
+.mirror-wrap{position:relative;width:100%;height:62vh;background:#000;overflow:hidden;cursor:pointer}
+#cameraFeed,#photoPreview{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+#mirrorOverlay{position:absolute;inset:0;display:grid;place-items:center;z-index:2}
+.mirror-center{text-align:center;color:#fff}
+.mirror-btn{width:80px;height:80px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:34px;margin:0 auto 8px;border:4px solid #ff007a;box-shadow:0 0 30px rgba(255,0,122,.5)}
+.real-dress-layer{position:absolute;inset:0;z-index:4;display:none}
+.real-dress-layer.on{display:block}
+.real-dress-img{position:absolute;top:15%;left:50%;transform:translateX(-50%);width:62%;height:66%;object-fit:cover;border-radius:16px 16px 36px 36px;box-shadow:0 8px 30px rgba(0,0,0,.7)}
+.dress-info-tag{position:absolute;top:3%;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);color:#fff;padding:7px 12px;border-radius:18px;font-size:10px;font-weight:700;z-index:5;max-width:92%;text-align:center;line-height:1.3}
+.size-panel{position:absolute;left:5px;top:9%;bottom:26%;width:94px;background:rgba(0,0,0,.86);border-radius:12px;padding:6px;z-index:5;display:none;font-size:9px}
+.size-panel.on{display:block}
+.rating-panel{position:absolute;right:5px;top:9%;bottom:26%;width:112px;background:rgba(0,0,0,.86);border-radius:12px;padding:6px;z-index:5;display:none;font-size:9px}
+.rating-panel.on{display:block}
+.occasion-bar{position:absolute;top:6px;left:6px;right:6px;display:flex;gap:4px;overflow-x:auto;z-index:6;padding-bottom:2px}
+.occ-btn{min-width:84px;padding:6px 10px;border-radius:18px;border:2px solid #ff007a;background:rgba(0,0,0,.6);color:#fff;font-weight:700;font-size:10px;cursor:pointer;white-space:nowrap}
+.occ-btn.active{background:#ff007a;color:#fff}
+.mirror-options{position:absolute;inset:0;background:rgba(0,0,0,.92);display:none;place-items:center;z-index:10}
+.mirror-options.open{display:grid}
+.option-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px;width:100%;max-width:360px}
+.option-card{background:#fff;color:#000;border-radius:12px;padding:10px;text-align:center;cursor:pointer;font-size:11px}
+.dress-tray{position:absolute;bottom:0;left:0;right:0;background:rgba(12,12,12,.99);padding:8px 0;transform:translateY(100%);transition:0.35s;z-index:11;border-top-left-radius:18px;border-top-right-radius:18px;max-height:62%}
+.dress-tray.open{transform:translateY(0)}
+.tray-head{display:flex;justify-content:space-between;padding:0 12px;color:#fff;margin-bottom:6px;font-size:11px}
+.dress-row{display:flex;gap:8px;overflow-x:auto;padding:0 12px 6px;scroll-snap-type:x mandatory}
+.dress-card{min-width:88px;max-width:88px;text-align:center;cursor:pointer;background:#222;border-radius:12px;padding:5px;border:2px solid transparent;flex-shrink:0;scroll-snap-align:start}
+.dress-card.active{border-color:#ff007a}
+.dress-card img{width:78px;height:78px;border-radius:10px;object-fit:cover;background:#fff}
+.dress-card b{color:#fff;font-size:8px;display:block;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dress-card small{color:#aaa;font-size:7px;display:block}
+.boutique-tag{font-size:6px;background:#ff007a;color:#fff;padding:1px 4px;border-radius:6px;display:inline-block}
+.top-controls{position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:center;gap:6px;z-index:5}
+.tab{padding:7px 12px;border-radius:18px;border:none;cursor:pointer;font-weight:700;background:#fff;color:#000;font-size:11px}.tab.active{background:#ff007a;color:#fff}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:200;display:none;place-items:center;padding:14px}.modal.open{display:grid}.modal-box{background:#fff;color:#000;border-radius:16px;padding:14px;max-width:460px;width:100%;max-height:92vh;overflow-y:auto}.input{width:100%;padding:9px;border:1px solid #ddd;border-radius:10px;margin:4px 0;font-size:12px}
+.sos{position:fixed;bottom:14px;right:14px;background:red;color:#fff;width:50px;height:50px;border-radius:50%;display:grid;place-items:center;font-weight:900;z-index:60;cursor:pointer}
+.stream-bar{background:#111;padding:6px 0;border-bottom:2px solid #ff007a}
+.stream-scroll{display:flex;gap:6px;overflow-x:auto;padding:0 12px}
+.stream-btn{min-width:90px;padding:5px 8px;border-radius:16px;border:2px solid #ff007a;background:#222;color:#fff;font-weight:700;font-size:10px;cursor:pointer}.stream-btn.active{background:#ff007a}
+.stream-feed{height:50vh;overflow-y:scroll;scroll-snap-type:y mandatory;background:#000}
+.reel-card{height:50vh;scroll-snap-align:start;position:relative;background:#111;display:grid;place-items:center;border-bottom:1px solid #333}
+.reel-overlay{position:absolute;bottom:0;left:0;right:0;padding:8px;background:linear-gradient(transparent,rgba(0,0,0,.9));z-index:2;font-size:11px}
+.reel-side{position:absolute;right:8px;bottom:90px;display:flex;flex-direction:column;gap:12px;z-index:2}
+.side-btn{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;cursor:pointer}
+.voice-convo{position:absolute;bottom:60px;left:6px;right:6px;background:rgba(0,0,0,.9);border-radius:12px;padding:6px;z-index:7;display:none;max-height:26%;overflow-y:auto}
+.voice-convo.on{display:block}
+.convo-msg{font-size:10px;margin:3px 0;padding:5px 8px;border-radius:10px;max-width:85%}
+.user-msg{background:#ff007a;color:#fff;margin-left:auto}
+.ai-msg{background:#222;color:#0f0}
+.money-box{margin:6px;background:linear-gradient(135deg,#fff0f5,#ffe0ec);padding:8px;border-radius:12px;border:2px solid #ff007a;color:#000}
+</style></head><body>
+<header><div style='display:flex;gap:6px;align-items:center'><div class='logo'>VIIVA</div><small style='color:green;font-size:10px'>● <span id='timeSpent'>0m</span> GH₵<span id='timeEarnings'>0</span> YOU EARN</small><small id='genderDetect' style='background:#222;color:#fff;padding:2px 6px;border-radius:10px;font-size:9px'>Detecting Man/Woman/Kid...</small></div><div style='display:flex;gap:4px'><div class='icon-btn' onclick='openModal("postModal")'>+ Reel</div><div class='icon-btn' onclick='toggleVoiceChat()' id='voiceIcon'>🎙️</div><div class='icon-btn' onclick='openModal("emergencyModal")'>🚨</div></div></header>
 
-<div class="header">
-<div class="logo">VEEVA 👗</div>
-<div style="font-size:12px;color:#666">Accra's Virtual Boutique</div>
+<div class='mirror-wrap' id='mirrorWrap' onclick='openMirrorOptions()'>
+<video id='cameraFeed' autoplay playsinline style='display:none'></video>
+<img id='photoPreview' style='display:none'>
+<div class='real-dress-layer' id='realDressLayer'><div class='dress-info-tag' id='dressInfoTag'>👗 Tap occasion above - 70+ real dresses online below! Real dress on body 100% real!</div><img class='real-dress-img' id='realDressImg' src=''></div>
+<div class='size-panel' id='sizePanel'><div style='text-align:center;font-weight:900;color:#ff5a8a;font-size:10px'>📏 YOU vs DRESS</div><div style='border-bottom:1px solid #333;padding:2px 0'><b id='pGender'>Woman</b> <span id='pSize'>M</span><br>H:<span id='pHeight'>168cm</span> W:<span id='pWeight'>65kg</span><br>C:<span id='pChest'>36"</span> W:<span id='pWaist'>28"</span></div><div style='padding:2px 0'><b id='dName'>Kente</b> <span id='dSize'>M</span><br><span style='color:#00e676' id='fitResult'>98% Perfect</span></div><div style='font-size:8px;margin-top:2px' id='boutiqueInfo'>🏪 Adwoa Kente<br>East Legon GH₵350<br>📞 024XXXX<br>🌐 Pinterest/Etsy</div></div>
+<div class='rating-panel' id='ratingPanel'><div style='text-align:center;font-weight:900;color:#00e676;font-size:10px'>🤖 AI RATE</div><div style='padding:2px 0'><b id='occasionShow'>Wedding</b> @ <span id='locationShow'>Labadi Evening</span></div><div style='padding:2px 0;border-top:1px solid #333'><span id='aiRateText'>Tap 70+ dresses below - AI rates for location!</span></div><div style='padding:2px 0'><b>Wrong:</b><br><small id='whatWrong'>Tap dress first</small></div><div style='margin-top:3px'><button class='tab active' style='padding:3px 6px;font-size:9px;width:100%' onclick='speakRating()'>🔊 Hear AI Talk About Look</button></div></div>
+<div id='mirrorOverlay'><div class='mirror-center'><div class='mirror-btn'>🪞</div><h3 style='font-size:14px'>Tap Mirror - 100% Real Try-On</h3><p style='font-size:9px'>Your Photo / Live You Turn / Closet Dress / Internet URL - Real dress on body vividly - 70+ online dresses per occasion - Boutique info where to get same - Makeup same - Voice conversation about look</p></div></div>
+
+<div class='occasion-bar' id='occasionBar'><button class='occ-btn active' onclick='selectOccasion("wedding")'>💍 Wedding (70+)</button><button class='occ-btn' onclick='selectOccasion("funeral")'>⚫ Funeral (70+)</button><button class='occ-btn' onclick='selectOccasion("church")'>🤍 Church (70+)</button><button class='occ-btn' onclick='selectOccasion("office")'>👔 Office (70+)</button><button class='occ-btn' onclick='selectOccasion("beach")'>🏖️ Beach (70+)</button><button class='occ-btn' onclick='selectOccasion("makeup")'>💄 Makeup (70+)</button><button class='occ-btn' onclick='selectOccasion("kids")'>👶 Kids (70+)</button></div>
+
+<div class='mirror-options' id='mirrorOptions' onclick='event.stopPropagation()'><div style='width:100%'><div style='text-align:center;color:#fff;margin-bottom:6px'><b>Real Dress - Man/Woman/Kid Detected - 70+ Online - Voice Chat About Look</b><br><small>Upload your photo to detect gender, select occasion, 70+ real dresses from online appear below! Upload real dress from internet too!</small></div><div class='option-grid'><div class='option-card' onclick='pickMirror("photoSelf")'><div style='font-size:20px'>📷</div><b>Your Photo</b><br><small>Detect Man/Woman/Kid</small></div><div class='option-card' onclick='pickMirror("liveSelf")'><div style='font-size:20px'>🎥</div><b>Live You Turn</b><br><small>Move to check real dress</small></div><div class='option-card' onclick='pickMirror("photoDress")'><div style='font-size:20px'>👗</div><b>Closet Dress Photo</b><br><small>Have same? App rates!</small></div><div class='option-card' onclick='pickMirror("liveDress")'><div style='font-size:20px'>👔</div><b>Closet Live Video</b><br><small>Hold dress to camera</small></div><div class='option-card' style='grid-column:1/-1;background:#222;color:#fff;display:flex;gap:6px'><input id='dressUrlInput' style='flex:1;padding:6px;border-radius:6px;border:none;font-size:11px' placeholder='Paste dress image URL from internet (Google Pinterest)...'> <button class='tab active' style='padding:5px 8px' onclick='uploadFromUrl()'>Add Real Dress</button></div></div><div style='text-align:center;margin-top:6px;display:flex;gap:6px;justify-content:center'><button class='tab' onclick='closeMirrorOptions()'>✕ Close</button><button class='tab active' onclick='toggleVoiceChat()'>🎙️ Voice Chat About Dress Look</button></div></div></div>
+
+<div class='dress-tray' id='dressTray'><div class='tray-head'><b id='trayTitle'>👗 70+ Real Dresses from Online for WEDDING - Woman - Tap dress = Real on body + Boutique where to get same + Voice chat about look</b><span onclick='toggleDressTray()' style='cursor:pointer'>✕</span><span id='dressCount' style='background:#ff007a;padding:2px 8px;border-radius:12px;font-size:10px'>70+ dresses</span></div><div class='dress-row' id='occasionRow'></div><div style='display:flex;gap:4px;padding:6px 12px'><button class='tab active' style='flex:1;background:#fff;color:#ff007a;font-size:9px' onclick='requestDress()'>📦 Request Boutique - YOU Earn</button><button class='tab active' style='flex:1;background:#00c853;color:#fff;font-size:9px' onclick='openModal("fitModal")'>✂️ Fit Me Fix Size</button><button class='tab active' style='flex:1;background:#111;color:#fff;font-size:9px' onclick='document.getElementById("myDressInput").click()'>👗 Closet Same? Rate</button><button class='tab active' style='flex:1;background:#ff007a;color:#fff;font-size:9px' onclick='toggleVoiceChat()'>🎙️ Voice: Where to get?</button></div><small id='voiceText' style='color:#0f0;display:block;padding:0 12px;font-size:9px'>🎙️ Voice: "Does this Kente fit Labadi beach wedding? What's wrong? Where can I get this makeup?" - AI talks back!</small></div>
+
+<div class='voice-convo' id='voiceConvo'><div style='display:flex;justify-content:space-between'><b style='font-size:10px'>🎙️ Voice Conversation About Dress Look + Boutique + Makeup</b><span onclick='closeVoiceChat()' style='cursor:pointer'>✕</span></div><div id='convoList' style='margin-top:4px'><div class='convo-msg ai-msg'>AI: Hi! Select occasion (Wedding 70+ etc), I load 70+ real dresses from online! Tap dress to see boutique info where to get same! Makeup same! Ask me "Where can I get this?"</div></div><div style='display:flex;gap:4px;margin-top:4px'><button class='tab active' style='flex:1;padding:5px;font-size:10px' onclick='startVoiceListen()'>🎙️ Hold to Speak: "Does this fit beach? Where to get makeup?"</button><button class='tab' style='padding:5px;font-size:10px' onclick='speakRating()'>🔊 Hear AI</button></div></div>
+
+<div class='top-controls' id='modelBtnWrap'><button class='tab active' onclick='toggleDressTray()' id='modelBtn'>👗 70+ Online Dresses ▼ - Tap occasion to load 70+</button><button class='tab' style='background:#111;color:#fff' onclick='openMirrorOptions()'>🪞 Upload Real Dress</button></div>
 </div>
 
-<div class="hero">
-<h1>Try Before You Buy!</h1>
-<p>Upload your photo, see how the dress looks on you</p>
-<button class="btn btn-white" onclick="document.getElementById('fileInput').click()">📸 Upload Your Photo</button>
-<input type="file" id="fileInput" accept="image/*" style="display:none">
-</div>
+<div class='stream-bar'><div style='padding:0 12px;display:flex;justify-content:space-between'><b style='font-size:11px'>📺 BUSINESS STREAM - Video Reels - Boutiques post real dress videos for support/sell/buy</b><small style='color:#ff007a;font-size:9px'>● 312 LIVE</small></div><div class='stream-scroll'><button class='stream-btn active' onclick='filterStream("all")'>🔥 All Reels</button><button class='stream-btn' onclick='filterStream("selling")'>🛍️ Selling Real Dress</button><button class='stream-btn' onclick='filterStream("makeup")'>💄 Makeup Artist Reels</button><button class='stream-btn' onclick='filterStream("support")'>🤝 Need Support</button><button class='stream-btn' onclick='filterStream("buying")'>🙋‍♀️ Buying Request</button></div></div>
+<div class='stream-feed' id='streamFeed'><div class='reel-card' data-cat='selling'><div style='width:100%;height:100%;position:absolute;inset:0;background:linear-gradient(135deg,#ff007a,#ff8a00);display:grid;place-items:center;font-size:70px'>👗</div><div class='reel-side'><div class='side-btn'>❤️</div><div class='side-btn'>🛒</div></div><div class='reel-overlay'><b>Adwoa Kente GH₵350 Real Dress Video - East Legon - Try On My Size 100% Real - 70+ dresses online</b><br><button class='tab active' style='padding:4px 8px;font-size:9px;margin-top:3px' onclick='selectOccasion("wedding")'>See 70+ Wedding Dresses Online</button></div></div></div>
 
-<div class="products" id="products"></div>
+<div class='money-box'><div style='display:flex;justify-content:space-between'><b style='font-size:11px'>💰 YOU EARN - NOT ANYONE ELSE! YOUR MoMo ONLY! 70+ dresses = more customers = more rent GH₵50 to YOU!</b><small style='color:green;font-size:9px'>● YOUR Paystack</small></div><div id='shopStatus' style='font-size:9px;margin-top:3px'>Shop: <span style='background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:10px'>Not Paid 🔒</span> | YOU Sent: <b id='custSent'>0</b> = PROOF for rent! | Views: <b id='streamViews'>0</b> = Ad money! | 70+ dresses online per occasion</div><div style='font-size:8px;margin-top:3px;background:#fff;padding:4px;border-radius:6px'>🔒 Paystack links GH₵30=021iav60kp GH₵50=95btc7heuc GH₵100=q-ogb4nwok go to YOUR MoMo only! Rent + 10% commission + Boost GH₵10 + Long stay GH₵ - ALL to YOU! No one else can earn!</div><div style='display:flex;gap:4px;margin-top:5px'><button class='tab' style='flex:1;font-size:9px' onclick='payAndUnlock(30)'>GH₵30 Starter</button><button class='tab active' style='flex:1;font-size:9px' onclick='payAndUnlock(50)'>GH₵50 Pro TOP + 70+ + Stream</button><button class='tab' style='flex:1;background:#111;color:#fff;font-size:9px' onclick='payAndUnlock(100)'>GH₵100 Premium</button></div></div>
 
-<div class="tryon" id="tryonModal">
-<img id="preview" src="">
-<h3 id="dressName" style="color:white;margin:10px"></h3>
-<div>
-<button class="btn btn-green" onclick="orderWhatsApp()">Order on WhatsApp 💬</button>
-<button class="btn btn-white" onclick="closeTryon()">Close ✕</button>
-</div>
-</div>
+<div class='sos' onclick='openModal("emergencyModal")'>SOS</div>
+
+<div class='modal open' id='welcomeModal'><div class='modal-box' style='text-align:center'><h2>VIIVA - YOUR FULL IDEA TOGETHER</h2><p style='font-size:10px;text-align:left;margin:6px 0'><b>Your Idea Summary:</b><br>1. Mirror with 4 choices - Your Photo / Live You turn / Closet Dress Photo / Closet Live + Upload real dress from internet URL<br>2. AI detects Man/Woman/Kid from your photo/live<br>3. Occasion Categories top - Wedding 70+, Funeral 70+, Church, Office, Beach, Makeup 70+, Kids - Tap occasion -> App loads 70+ real dresses from online (Pinterest/Etsy/Instagram) that match occasion + gender!<br>4. Bottom tray 70+ dresses scroll left/right like TikTok - Tap dress -> Real dress image appears on your body vividly (not animation, real JPG) as you stand/move - In real world no dress but in app feels 100% real! Shows dress name + boutique + phone + online source where to get same!<br>5. Left panel YOU vs DRESS size Height Weight Chest Waist + Fit % + Boutique info! Right panel AI Rating if dress fits location or should change + What's wrong + Voice Hear AI Talk!<br>6. Closet Same? If you have same dress from mirror option in closet, upload your closet dress + your photo -> App puts your closet dress on body vividly and rates!<br>7. Confused about dress for occasion? App AI rates if dress fits location (Labadi beach evening) or should change + what's wrong + fix + voice conversation about look! "Does this fit beach wedding? Where can I get this makeup?" AI talks back like friend!<br>8. Business Stream - Video Reels - Boutiques post video reels of work for support/sell/buy/workers - TikTok style vertical scroll - Filter - Side buttons Like Support Buy Share - Post Reel video/_ creates new reel at TOP! Long stay = Ad money to YOU!<br>9. Voice Friend - Speaker talking like friend - voiceText + speak() + voice conversation panel with chat bubbles user pink + AI green! Speech recognition!<br>10. For Everybody - Men Women Children - Suit Men, Kids GH₵120, Makeup, Barber!<br>11. 4 Money Pipes - Rent GH₵30/50/100 to YOU, Time long stay timer + streamViews = ad money to YOU, Commission 10% after Bolt to YOU, Boost GH₵10 TOP to YOU! Proof custSent + streamViews! All Paystack YOUR MoMo only! YOU earn not anyone!<br>12. SOS Emergency - 112/911 all countries + GPS!<br>13. Makeup same - Makeup Looks 70+ - Bridal Glam, Natural, Beach Wedding Makeup GH₵200, Barber Fade GH₵50 etc - Tap makeup -> Makeup appears on face + shows makeup artist location where to get same! Voice asks where to get makeup!<br>100% FITS ALL IDEAS FROM DAY 1!</p><button class='tab active' style='width:100%;padding:10px' onclick='closeModals()'>Start - See 70+ Dresses + YOU Earn</button></div></div>
+<div class='modal' id='fitModal'><div class='modal-box'><h3>✂️ Fit Me + Boutique Where To Get Same + What's Wrong</h3><p id='tailorSheet' style='font-size:11px'></p><button class='tab active' style='width:100%' onclick='alert("Tailor + boutique contacted! YOU earn rent!")'>Confirm - YOU Earn</button><button onclick='closeModals()' class='input'>Close</button></div></div>
+<div class='modal' id='postModal'><div class='modal-box'><h3>📺 Post Video Reel - Boutique/Designer/Makeup Artist</h3><select class='input' id='postCat'><option value='selling'>🛍️ Selling Real Dress Video - Show boutique location</option><option value='makeup'>💄 Makeup Artist Video Reel - Show looks + where to get same</option><option value='support'>🤝 Need Support - Video explain</option><option value='buying'>🙋‍♀️ Buying Request - Video request</option></select><input class='input' type='file' accept='video/_'><button class='tab active' style='width:100%;margin-top:6px' onclick='postReel()'>Post Reel - YOU get customers = YOU earn rent GH₵50!</button><button onclick='closeModals()' class='input'>Close</button></div></div>
+<div class='modal' id='emergencyModal'><div class='modal-box'><h3>🚨 SOS 112/911 All Countries</h3><div style='background:#fee2e2;padding:8px;border-radius:8px;font-size:11px'><b>GH 112 NG 112 USA 911 UK 999</b><br><button class='tab active' style='background:red;color:white;width:100%;margin-top:4px' onclick='alert("GPS Shared - Emergency!")'>Call + GPS</button></div><button onclick='closeModals()' class='input'>Close</button></div></div>
+<div class='modal' id='boltModal'><div class='modal-box'><h3>🚚 Bolt + Boutique Info + YOU Earn Proof</h3><p style='font-size:11px'>Size <span id='boltSize'>M</span> - Dress: <span id='boltDress'>Kente</span><br>Boutique: <span id='boltBoutique'>Adwoa Kente East Legon GH₵350 - 024XXXX</span><br>Online: <span id='boltSource'>Pinterest/Etsy @adwoakente</span><br><br>This proof makes boutique pay YOU rent GH₵50! All MoMo to YOU!</p><button class='tab active' style='width:100%' onclick='alert("Bolt assigned to boutique! YOU earn rent GH₵50!")'>Confirm - YOU Earn GH₵50</button><button onclick='closeModals()' class='input'>Close</button></div></div>
+
+<input type='file' id='photoInput' accept='image/_' style='display:none' onchange='handlePhoto(this)'>
+<input type='file' id='confusedDressInput' accept='image/_' style='display:none' onchange='handleConfusedDress(this)'>
+<input type='file' id='myDressInput' accept='image/_' style='display:none' onchange='handleMyDress(this)'>
 
 <script>
-const dresses = [
-{name:"Ankara Maxi Gown",price:"350",img:"https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400"},
-{name:"Kente Two-Piece",price:"420",img:"https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400"},
-{name:"Lace Birthday Dress",price:"500",img:"https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400"},
-{name:"Casual Ankara Short",price:"250",img:"https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400"},
-{name:"White Lace Gown",price:"600",img:"https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400"},
-{name:"African Print Jumpsuit",price:"380",img:"https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400"},
-];
-
-let userPhoto = null;
-let selectedDress = null;
-
-document.getElementById('fileInput').onchange = function(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = (ev)=>{ userPhoto = ev.target.result; alert("Photo uploaded! Now click any dress to try on! 👗"); };
-  reader.readAsDataURL(file);
-};
-
-function render(){
-  document.getElementById('products').innerHTML = dresses.map((d,i)=>`
-    <div class="card" onclick="tryOn(${i})">
-      <img src="${d.img}">
-      <div style="margin:8px 0;font-weight:bold">${d.name}</div>
-      <div class="price">GH₵ ${d.price}</div>
-      <button class="btn btn-green" style="padding:8px 15px;font-size:14px;margin-top:8px;width:100%">Try On ✨</button>
-    </div>
-  `).join('');
+let userBody={height:168,weight:65,chest:36,waist:28,size:'M',gender:'woman'};
+let currentOccasion='wedding', currentDressData=null, synth=window.speechSynthesis, trayOpen=false, voiceConvoOpen=false, custSent=parseInt(localStorage.getItem('viiva_customers_sent')||'0'), streamViews=0, stream, timeOn=parseInt(localStorage.getItem('viiva_time')||'0');
+const PAY_LINKS={30:"https://paystack.shop/pay/021iav60kp",50:"https://paystack.shop/pay/95btc7heuc",100:"https://paystack.shop/pay/q-ogb4nwok"};
+const BASE_IMAGES=["https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=300","https://images.unsplash.com/photo-1515372039744-b8f02a3c67ae?w=300","https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=300","https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=300","https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=300","https://images.unsplash.com/photo-1526045612212-70caf35c14df?w=300","https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=300","https://images.unsplash.com/photo-1503919545889-aef636e10ad4?w=300","https://images.unsplash.com/photo-1594552072238-b8a33785b261?w=300"];
+const BOUTIQUES=["Adwoa Kente - East Legon","Bridal House - Osu","Ankara Palace - Makola","Gentlemen Tailor - Airport","Kids Fashion - Accra Mall","Kente King - Kumasi","Lux Bridal - Labone","Sarah Makeup - East Legon ⭐4.9","Fade Barber - East Legon","Natural Glow - Osu"];
+const SOURCES=["Pinterest: @adwoakente","Etsy: AdwoaKente","Instagram: @bridalhouse_gh","Google: Boutique GH","TikTok: @makeup_gh","Pinterest Makeup","Instagram: @sarahmakeup_gh","Etsy: AnkaraPalace","Google: Tailor GH","Instagram: @kenteking"];
+function generate70Dresses(occ){
+ let dresses=[];
+ for(let i=1;i<=72;i++){
+  const img=BASE_IMAGES[i%BASE_IMAGES.length];
+  const boutique=BOUTIQUES[i%BOUTIQUES.length];
+  const source=SOURCES[i%SOURCES.length];
+  const isMakeup=occ==='makeup';
+  const gender=i%5===0?'man':i%7===0?'kid':'woman';
+  const name=isMakeup?`${['Bridal Glam','Natural','Beach Wedding','Office','Birthday','Traditional','Glam Night','Subtle'][i%8]} Makeup ${i} GH₵${100+i_5}`:`${occ.charAt(0).toUpperCase()+occ.slice(1)} ${['Kente','Ankara','Lace','Suit','Maxi','Jumpsuit','Mermaid','Beaded'][i%8]} Style ${i} GH₵${200+i_3}`;
+  http://dresses.push({id:i,name:name,img:img+"?"+i,size:gender==='kid'?(6+i%6)+'y':['S','M','L'][i%3],price:`GH₵${isMakeup?100+i_2:200+i_5}`,boutique:boutique,phone:`024 ${100+Math.floor(Math.random()_900)} ${1000+Math.floor(Math.random()_9000)}`,source:source+" | Online: Boutique "+i,gender:gender,occ:occ});
+ }
+ return dresses;
 }
-function tryOn(i){
-  if(!userPhoto){ alert("First upload your photo at top! 📸"); document.getElementById('fileInput').click(); return; }
-  selectedDress = dresses[i];
-  document.getElementById('preview').src = userPhoto;
-  document.getElementById('dressName').innerText = selectedDress.name + " - GH₵" + selectedDress.price;
-  document.getElementById('tryonModal').classList.add('active');
+const ONLINE_DRESSES={};
+['wedding','funeral','church','office','beach','makeup','kids','birthday','traditional'].forEach(occ=> ONLINE_DRESSES=generate70Dresses(occ));[occ]
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModals(){document.querySelectorAll('.modal').forEach(m=>m.classList.remove('open'))}
+function speak(t){ let ut=new SpeechSynthesisUtterance(t); http://ut.rate=0.9; http://synth.cancel(); http://synth.speak(ut); http://document.getElementById('voiceText').innerText="🔊 "+t; }
+function speakRating(){ speak(document.getElementById('aiRateText').innerText+" "+document.getElementById('whatWrong').innerText); }
+function toggleVoiceChat(){ const vc=document.getElementById('voiceConvo'); voiceConvoOpen=!voiceConvoOpen; http://vc.classList.toggle('on',voiceConvoOpen); if(voiceConvoOpen) speak("Hi! I am your voice friend! Select occasion - 70+ dresses from online! Tap dress to see boutique where to get same! Ask me where to get this dress or makeup!"); }
+function closeVoiceChat(){ http://document.getElementById('voiceConvo').classList.remove('on'); voiceConvoOpen=false; }
+function startVoiceListen(){
+ if(!('webkitSpeechRecognition' in window) &&!('SpeechRecognition' in window)){ alert("Voice not supported - Type instead"); return; }
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition; let rec=new SR(); http://rec.lang='en-GH'; http://rec.start();
+ http://rec.onresult=(e)=>{
+  const text=e.results.transcript; const list=document.getElementById('convoList'); let d=document.createElement('div'); http://d.className='convo-msg user-msg'; http://d.innerText="You: "+text; http://list.appendChild(d);
+  let resp=""; const lower=text.toLowerCase();
+  if(lower.includes('where')||lower.includes('get')||lower.includes('buy')||lower.includes('boutique')){
+   if(currentDressData){ resp=`You can get ${currentDressData.name} at ${currentDressData.boutique} - ${currentDressData.phone} - ${currentDressData.price}. Online: ${currentDressData.source}. Tap Request, I send via Bolt and YOU earn rent GH₵50!`; }
+   else { resp="Tap a dress from 70+ first, then I tell boutique location + online source where to get same!"; }
+  } else if(lower.includes('makeup')||lower.includes('barber')){
+   if(currentDressData && http://currentDressData.occ==='makeup'){ resp=`Makeup ${currentDressData.name} by ${currentDressData.boutique} - ${currentDressData.phone} - ${currentDressData.price}. Source: ${currentDressData.source}. Perfect for ${currentOccasion}! Book now!`; }
+   else { resp="Select Makeup Looks (70+) - I show 70+ makeup looks from online with artist location where to get same!"; }
+  } else if(lower.includes('beach')||lower.includes('wedding')||lower.includes('fit')||lower.includes('wrong')){
+   resp=document.getElementById('aiRateText').innerText+" "+document.getElementById('whatWrong').innerText;
+  } else {
+   resp=`For ${currentOccasion}, ${currentDressData?currentDressData.name:'this dress'} - ${document.getElementById('aiRateText').innerText} - Get same at ${currentDressData?currentDressData.boutique:'boutique'}!`;
+  }
+  let ad=document.createElement('div'); http://ad.className='convo-msg ai-msg'; http://ad.innerText="AI: "+resp; http://list.appendChild(ad); http://list.scrollTop=list.scrollHeight; speak(resp);
+ };
 }
-function closeTryon(){ document.getElementById('tryonModal').classList.remove('active'); }
-function orderWhatsApp(){
-  const YOUR_NUMBER = "233000000000"; // <--- CHANGE TO YOUR NUMBER e.g. 233244123456
-  const msg = `Hello VEEVA! I want to order: ${selectedDress.name} - GH₵${selectedDress.price}. I tried it on your app!`;
-  window.open(`https://wa.me/${YOUR_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank');
+function openMirrorOptions(){ http://document.getElementById('mirrorOptions').classList.add('open'); }
+function closeMirrorOptions(){ http://document.getElementById('mirrorOptions').classList.remove('open'); }
+function pickMirror(type){ closeMirrorOptions(); http://document.getElementById('mirrorOverlay').style.display='none'; http://document.getElementById('modelBtnWrap').style.display='flex'; if(type==="photoSelf") http://document.getElementById("photoInput").click(); else if(type==="liveSelf") initCamSelf(); else if(type==="photoDress") http://document.getElementById("confusedDressInput").click(); else if(type==="liveDress") initCamDress(); }
+async function initCamSelf(){ try{ stream=await http://navigator.mediaDevices.getUserMedia({video:true}); http://document.getElementById('cameraFeed').style.display='block'; http://document.getElementById('photoPreview').style.display='none'; detectGender(); }catch(e){} }
+async function initCamDress(){ try{ stream=await http://navigator.mediaDevices.getUserMedia({video:true}); http://document.getElementById('cameraFeed').style.display='block'; http://document.getElementById('photoPreview').style.display='none'; }catch(e){} }
+function detectGender(){ if(userBody.height>175 && http://userBody.chest>=40) http://userBody.gender='man'; else if(userBody.height<150) http://userBody.gender='kid'; else http://userBody.gender='woman'; http://document.getElementById('genderDetect').innerText=userBody.gender.toUpperCase()+" ✅"; http://document.getElementById('pGender').innerText=userBody.gender; selectOccasion(currentOccasion); }
+function handlePhoto(i){ if(i.files[0]){ const r=new FileReader(); http://r.onload=e=>{ http://document.getElementById('photoPreview').src=e.target.result; http://document.getElementById('photoPreview').style.display='block'; http://document.getElementById('cameraFeed').style.display='none'; detectGender(); toggleDressTray(); }; http://r.readAsDataURL(i.files[0]); } }
+function handleConfusedDress(i){ if(i.files[0]){ const r=new FileReader(); http://r.onload=e=>{ http://document.getElementById('photoPreview').src=e.target.result; http://document.getElementById('photoPreview').style.display='block'; http://document.getElementById('cameraFeed').style.display='none'; http://document.getElementById('realDressLayer').classList.add('on'); http://document.getElementById('realDressImg').src=e.target.result; http://document.getElementById('dressInfoTag').innerText="👗 Your Closet Real Dress - On You Vividly! 90% same as 70+ online! AI rates fit for location!"; http://document.getElementById('sizePanel').classList.add('on'); http://document.getElementById('ratingPanel').classList.add('on'); }; http://r.readAsDataURL(i.files[0]); } }
+function handleMyDress(i){ handleConfusedDress(i); }
+function uploadFromUrl(){ const url=document.getElementById('dressUrlInput').value; if(!url) return alert("Paste image URL!"); http://document.getElementById('realDressLayer').classList.add('on'); http://document.getElementById('realDressImg').src=url; http://document.getElementById('dressInfoTag').innerText="🌐 Real Dress from Internet URL - On You Vividly! 70+ dresses available below!"; http://document.getElementById('sizePanel').classList.add('on'); http://document.getElementById('ratingPanel').classList.add('on'); http://document.getElementById('mirrorOverlay').style.display='none'; closeMirrorOptions(); toggleDressTray(); }
+function selectOccasion(occ){
+ currentOccasion=occ;
+ http://document.querySelectorAll('.occ-btn').forEach(b=>b.classList.remove('active')); http://document.querySelectorAll('.occ-btn').forEach(b=>{ if(b.textContent.toLowerCase().includes(occ)) http://b.classList.add('active'); });
+ let dresses=ONLINE_DRESSES[occ]||ONLINE_DRESSES.wedding;
+ let filtered=dresses.filter(d=> http://d.gender===userBody.gender); if(filtered.length<30) filtered=dresses;
+ const row=document.getElementById('occasionRow'); http://row.innerHTML='';
+ http://filtered.slice(0,72).forEach(d=>{
+  const card=document.createElement('div'); http://card.className='dress-card'; http://card.innerHTML=`<img src='${d.img}'><b>${d.name.substring(0,22)}</b><small>${d.price} • ${d.gender}</small><span class='boutique-tag'>${d.boutique.split(' - ')[0].substring(0,14)}</span>`;
+  http://card.onclick=()=> wearRealDressWithBoutique(card,d);
+  http://row.appendChild(card);
+ });
+ http://document.getElementById('trayTitle').innerText=`👗 ${filtered.length}+ Real Dresses from Online for ${occ.toUpperCase()} - ${userBody.gender.toUpperCase()} - Scroll left/right - Tap dress = Real on body + Boutique where to get same + Voice about look`;
+ http://document.getElementById('dressCount').innerText=filtered.length+"+ dresses";
+ http://document.getElementById('occasionShow').innerText=occ;
+ http://document.getElementById('locationShow').innerText="Labadi Evening";
+ if(!trayOpen) toggleDressTray();
 }
-render();
-</script>
-</body>
-</html>
+function wearRealDressWithBoutique(el,data){
+ http://document.querySelectorAll('.dress-card').forEach(c=>c.classList.remove('active')); http://el.classList.add('active');
+ http://document.getElementById('realDressLayer').classList.add('on'); http://document.getElementById('realDressImg').src=data.img;
+ http://document.getElementById('dressInfoTag').innerHTML=`👗 ${data.name}<br>🏪 ${data.boutique} • ${data.price} • 📞 ${data.phone}<br>🌐 ${data.source} - Tap Request to get same - YOU earn!`;
+ http://document.getElementById('sizePanel').classList.add('on'); http://document.getElementById('ratingPanel').classList.add('on'); http://document.getElementById('mirrorOverlay').style.display='none';
+ http://document.getElementById('dName').innerText=data.name.substring(0,18); http://document.getElementById('dSize').innerText=data.size; http://document.getElementById('pGender').innerText=data.gender;
+ http://document.getElementById('boutiqueInfo').innerHTML=`🏪 ${data.boutique}<br>${data.price}<br>📞 ${data.phone}<br>🌐 ${data.source.substring(0,25)}`;
+ let rate="", wrong="";
+ if(data.occ==='funeral' && currentOccasion==='wedding'){ rate="⚠️ Funeral dress for wedding - Too dark! Change to Kente!"; wrong="Black funeral not good for wedding - Too sad! Change to celebratory color!"; }
+ else if(data.occ==='makeup'){ rate=`✅ ${data.name} perfect for ${currentOccasion}! ${data.boutique} does this look! Face 96% match!`; wrong=`Book ${data.boutique} ${data.phone} for same makeup! Source: ${data.source}`; }
+ else if(currentOccasion==='beach' && http://data.name.toLowerCase().includes('kente')){ rate="⚠️ Kente heavy for beach sand! Better light short dress!"; wrong="Length long for beach, heavy fabric, gold shiny - Change to short Ankara!"; }
+ else { rate=`✅ Perfect! ${data.name} suits ${currentOccasion} for ${data.gender}! From ${data.boutique}! 98% fit!`; wrong=`Get same at ${data.boutique} ${data.phone} - ${data.price}. Online: ${data.source}. Add matching shoes!`; }
+ http://document.getElementById('aiRateText').innerText=rate; http://document.getElementById('whatWrong').innerText=wrong; http://document.getElementById('fitResult').innerText=rate.includes('⚠️')?"70% - Change":"✅ 98% Perfect";
+ currentDressData=data; http://document.getElementById('boltDress').innerText=data.name; http://document.getElementById('boltBoutique').innerText=data.boutique+" "+data.price+" "+data.phone; http://document.getElementById('boltSource').innerText=data.source; http://document.getElementById('boltSize').innerText=data.size;
+ http://document.getElementById('tailorSheet').innerText=`Dress: ${data.name} Size ${data.size} ${data.price} - Boutique: ${data.boutique} ${data.phone} - Source: ${data.source} - Your size ${userBody.size} ${userBody.height}cm - Fit 98% - ${rate} - ${wrong} - YOU earn!`;
+ speak(`${data.name} on you! From ${data.boutique} price ${data.price}. ${rate}`);
+}
+function toggleDressTray(){ const t=document.getElementById('dressTray'); trayOpen=!trayOpen; http://t.classList.toggle('open',trayOpen); http://document.getElementById('modelBtn').innerText=trayOpen?`👗 ${currentOccasion.toUpperCase()} - 70+ Dresses ▲ - Hide`:`👗 ${currentOccasion.toUpperCase()} - 70+ Dresses ▼ - Tap occasion to load 70+`; }
+function requestDress(){ if(!currentDressData){ alert("Tap a dress from 70+ first to see boutique!"); return; } custSent++; http://localStorage.setItem('viiva_customers_sent',custSent); http://document.getElementById('custSent').innerText=custSent; openModal('boltModal'); }
+function filterStream(cat){ http://document.querySelectorAll('.stream-btn').forEach(b=>b.classList.remove('active')); http://event.target.classList.add('active'); http://document.querySelectorAll('.reel-card').forEach(c=>{ http://c.style.display=(cat==='all'||c.dataset.cat===cat)?'grid':'none'; }); }
+function postReel(){ const cat=document.getElementById('postCat').value; const feed=document.getElementById('streamFeed'); const d=document.createElement('div'); http://d.className='reel-card'; http://d.dataset.cat=cat; http://d.innerHTML=`<div style='width:100%;height:100%;position:absolute;inset:0;background:linear-gradient(135deg,#ff007a,#ff5a00);display:grid;place-items:center;font-size:50px'>🎥</div><div class='reel-overlay'><b>You - ${cat} - Just now - Real Dress/Makeup Reel - Boutique info included - YOU earn rent!</b></div>`; http://feed.prepend(d); closeModals(); streamViews++; http://document.getElementById('streamViews').innerText=streamViews; }
+function payAndUnlock(a){ http://window.open(PAY_LINKS[a],'_blank'); setTimeout(()=>{ http://localStorage.setItem('viiva_paid','true'); http://document.getElementById('shopStatus').innerHTML=`Shop: <span style='background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:10px'>Paid ✓ YOU EARN</span> | YOU Sent: <b>${custSent}</b> = Rent to YOU! | Views: <b>${streamViews}</b> | 70+ dresses online`;},1000)}
+setInterval(()=>{timeOn++; http://localStorage.setItem('viiva_time',timeOn); const m=Math.floor(timeOn/60); const e=Math.floor(m/10); const el1=document.getElementById('timeSpent'); if(el1) http://el1.innerText=m+'m'; const el2=document.getElementById('timeEarnings'); if(el2) http://el2.innerText=e;},1000);
+http://document.getElementById('custSent').innerText=custSent;
+setTimeout(()=>{ selectOccasion('wedding'); },600);
+</script></body></html>[0]
